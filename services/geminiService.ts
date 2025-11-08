@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { EmotionResult } from "../types";
 
@@ -40,10 +41,11 @@ export const analyzeEmotion = async (
     { text, base64Data, mimeType }: { text?: string; base64Data?: string; mimeType?: string; }
 ): Promise<EmotionResult | null> => {
     try {
-        if (!process.env.API_KEY || process.env.API_KEY === 'PASTE_YOUR_GEMINI_API_KEY_HERE') {
+        const apiKey = (window as any).process?.env?.API_KEY;
+        if (!apiKey || apiKey === 'PASTE_YOUR_GEMINI_API_KEY_HERE') {
             throw new Error("API key not configured. Please add your key to env.js.");
         }
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey: apiKey });
 
         const prompt = getPrompt(text);
         const parts: ({text: string} | {inlineData: {data: string, mimeType: string}})[] = [{ text: prompt }];

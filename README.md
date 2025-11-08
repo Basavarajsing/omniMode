@@ -103,7 +103,7 @@ The magic of this application is how it communicates with the Gemini API.
 ├── utils/              # Helper functions (e.g., file processing)
 │   └── fileHelper.ts
 ├── App.tsx             # Main application component, manages state
-├── env.js              # **IMPORTANT:** API key configuration file
+├── env.js              # **IMPORTANT:** API key configuration file (will be ignored by Git)
 ├── index.html          # The single HTML entry point
 ├── index.tsx           # React application bootstrap
 ├── types.ts            # TypeScript type definitions for the app
@@ -148,6 +148,74 @@ This is the most important step.
 2.  Right-click on `index.html`.
 3.  Select **"Open with Live Server"** from the context menu.
 4.  Your default web browser will open a new tab to an address like `http://127.0.0.1:5500/`. The application will be running and ready to use.
+
+---
+
+## 🚀 Deployment with Vercel
+
+Deploying this application is straightforward using Vercel, a platform designed for modern web projects. These steps will guide you through publishing your app to a live URL.
+
+### Prerequisites
+
+1.  **A GitHub Account:** If you don't have one, [sign up here](https://github.com/).
+2.  **A Vercel Account:** You can [sign up here](https://vercel.com/signup) using your GitHub account.
+
+### Step 1: Push Your Project to GitHub
+
+First, you need to get your code into a GitHub repository. The new `.gitignore` file will ensure your `env.js` file (containing your secret API key) is **not** uploaded.
+
+1.  **Create a new repository on GitHub.** Go to [github.com/new](https://github.com/new). Give it a name (e.g., `omni-mood-analyzer`) and keep it public or private as you prefer.
+2.  **Initialize Git and push your code.** Open a terminal or command prompt in your project's root directory and run the following commands. Replace `<YOUR_GITHUB_USERNAME>` and `<YOUR_REPOSITORY_NAME>` with your details.
+
+    ```bash
+    # Initialize a new Git repository
+    git init
+    
+    # Add all files to be tracked (will respect .gitignore)
+    git add .
+    
+    # Make your first commit
+    git commit -m "Initial commit of Omni-Mood Analyzer"
+    
+    # Set the main branch name (common practice)
+    git branch -M main
+    
+    # Add your GitHub repository as the remote origin
+    git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPOSITORY_NAME>.git
+    
+    # Push your code to GitHub
+    git push -u origin main
+    ```
+
+### Step 2: Deploy on Vercel
+
+Now that your code is on GitHub, deploying it to Vercel takes just a few clicks.
+
+1.  **Log in to your Vercel dashboard** and click **"Add New... > Project"**.
+2.  **Import your Git Repository.** Find the repository you just created and click the **"Import"** button next to it.
+3.  **Configure Your Project.** This is the most important step for handling your API key securely.
+    *   Vercel will detect that you have a static site with no framework, which is correct.
+    *   Expand the **"Build and Output Settings"** section.
+    *   Find the **"Build Command"** input field. Toggle the switch to override it and paste the following command:
+
+        ```bash
+        echo "window.process = { env: { API_KEY: '$API_KEY' } };" > env.js
+        ```
+        *   **Why?** This command tells Vercel to create the `env.js` file during deployment, dynamically inserting your API key from a secure environment variable.
+
+    *   Now, expand the **"Environment Variables"** section.
+    *   Add one new variable:
+        *   **Name:** `API_KEY`
+        *   **Value:** Paste your actual Gemini API key here.
+    *   Ensure the "Add" button is clicked and you see the variable listed.
+
+    ![Vercel Configuration Screenshot](https://storage.googleapis.com/aistudio-project-images/readme_screenshots/vercel-config-omni-mood.png)
+
+4.  **Deploy!** Click the **"Deploy"** button. Vercel will now build and deploy your site.
+
+### Step 3: All Done!
+
+After a minute or two, your deployment will be complete. Vercel will provide you with a live URL (e.g., `https://omni-mood-analyzer-alpha.vercel.app`) where you can access your running application. Congratulations!
 
 ## Disclaimer
 
