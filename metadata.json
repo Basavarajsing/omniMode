@@ -1,0 +1,8 @@
+{
+  "name": "Copy of Omni-Mood: AI Emotion Analyzer",
+  "description": "A comprehensive emotion analysis tool that uses the Gemini API to interpret mood from text, voice, images, and video. Get detailed emotional insights through a sleek and intuitive interface.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
