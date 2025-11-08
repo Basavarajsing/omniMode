@@ -103,7 +103,7 @@ The magic of this application is how it communicates with the Gemini API.
 ├── utils/              # Helper functions (e.g., file processing)
 │   └── fileHelper.ts
 ├── App.tsx             # Main application component, manages state
-├── env.js              # **IMPORTANT:** API key configuration file (will be ignored by Git)
+├── env.js              # **IMPORTANT:** API key configuration file
 ├── index.html          # The single HTML entry point
 ├── index.tsx           # React application bootstrap
 ├── types.ts            # TypeScript type definitions for the app
@@ -151,9 +151,9 @@ This is the most important step.
 
 ---
 
-## 🚀 Deployment with Vercel
+## 🚀 Deployment with Vercel (The Correct Way)
 
-Deploying this application is straightforward using Vercel, a platform designed for modern web projects. These steps will guide you through publishing your app to a live URL.
+Deploying this application is straightforward if you follow these exact steps. This process ensures Vercel handles your static files correctly without trying to run a build process it doesn't need.
 
 ### Prerequisites
 
@@ -162,60 +162,55 @@ Deploying this application is straightforward using Vercel, a platform designed 
 
 ### Step 1: Push Your Project to GitHub
 
-First, you need to get your code into a GitHub repository. The new `.gitignore` file will ensure your `env.js` file (containing your secret API key) is **not** uploaded.
+First, get your code into a GitHub repository.
 
-1.  **Create a new repository on GitHub.** Go to [github.com/new](https://github.com/new). Give it a name (e.g., `omni-mood-analyzer`) and keep it public or private as you prefer.
-2.  **Initialize Git and push your code.** Open a terminal or command prompt in your project's root directory and run the following commands. Replace `<YOUR_GITHUB_USERNAME>` and `<YOUR_REPOSITORY_NAME>` with your details.
+1.  **Create a new repository on GitHub.** Go to [github.com/new](https://github.com/new).
+2.  **Initialize Git and push your code.** Open a terminal in your project's root directory and run the following commands, replacing the placeholders with your GitHub details.
 
     ```bash
-    # Initialize a new Git repository
     git init
-    
-    # Add all files to be tracked (will respect .gitignore)
     git add .
-    
-    # Make your first commit
     git commit -m "Initial commit of Omni-Mood Analyzer"
-    
-    # Set the main branch name (common practice)
     git branch -M main
-    
-    # Add your GitHub repository as the remote origin
-    git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPOSITORY_NAME>.git
-    
-    # Push your code to GitHub
+    git remote add origin https://github.com/<YOUR_USERNAME>/<YOUR_REPO_NAME>.git
     git push -u origin main
     ```
 
 ### Step 2: Deploy on Vercel
 
-Now that your code is on GitHub, deploying it to Vercel takes just a few clicks.
+1.  Log in to your Vercel dashboard and click **"Add New... > Project"**.
+2.  **Import your Git Repository.** Find the repository you just created and click **"Import"**.
+3.  **Configure Your Project.** This is the most important part. Configure the settings **exactly** as described below.
 
-1.  **Log in to your Vercel dashboard** and click **"Add New... > Project"**.
-2.  **Import your Git Repository.** Find the repository you just created and click the **"Import"** button next to it.
-3.  **Configure Your Project.** This is the most important step for handling your API key securely.
-    *   Vercel will detect that you have a static site with no framework, which is correct.
-    *   Expand the **"Build and Output Settings"** section.
-    *   Find the **"Build Command"** input field. Toggle the switch to override it and paste the following command:
+    *   **Framework Preset:** Change the preset from "Vite" (or whatever is detected) to **`Other`**.
 
-        ```bash
-        echo "window.process = { env: { API_KEY: '$API_KEY' } };" > env.js
-        ```
-        *   **Why?** This command tells Vercel to create the `env.js` file during deployment, dynamically inserting your API key from a secure environment variable.
+    *   Expand the **"Build and Output Settings"** section. You must override all three settings here.
 
-    *   Now, expand the **"Environment Variables"** section.
+        1.  **Build Command:**
+            *   Click the **toggle switch** to ON.
+            *   Paste this command: `echo "window.process = { env: { API_KEY: '$API_KEY' } };" > env.js`
+
+        2.  **Output Directory:**
+            *   Click the **toggle switch** to ON.
+            *   **Delete all text** in the input field, leaving it completely **EMPTY**.
+
+        3.  **Install Command:**
+            *   Click the **toggle switch** to ON.
+            *   **Delete all text** in the input field, leaving it completely **EMPTY**.
+
+    *   Expand the **"Environment Variables"** section.
     *   Add one new variable:
         *   **Name:** `API_KEY`
         *   **Value:** Paste your actual Gemini API key here.
-    *   Ensure the "Add" button is clicked and you see the variable listed.
 
-    ![Vercel Configuration Screenshot](https://storage.googleapis.com/aistudio-project-images/readme_screenshots/vercel-config-omni-mood.png)
+    Your final configuration should look exactly like this screenshot:
+    ![Vercel Configuration Screenshot](https://storage.googleapis.com/aistudio-project-images/readme_screenshots/vercel-final-fix.png)
 
-4.  **Deploy!** Click the **"Deploy"** button. Vercel will now build and deploy your site.
+4.  **Deploy!** Click the **"Deploy"** button.
 
 ### Step 3: All Done!
 
-After a minute or two, your deployment will be complete. Vercel will provide you with a live URL (e.g., `https://omni-mood-analyzer-alpha.vercel.app`) where you can access your running application. Congratulations!
+Vercel will now follow your explicit instructions, skipping the unnecessary build steps and correctly deploying your static application. Your site will be live in a minute or two.
 
 ## Disclaimer
 
